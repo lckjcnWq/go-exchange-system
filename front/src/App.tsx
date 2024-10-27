@@ -1,11 +1,14 @@
 import {WagmiConfig, createConfig, configureChains} from 'wagmi';
 import {sepolia} from 'wagmi/chains';
 import {publicProvider} from 'wagmi/providers/public';
-import WalletConnect from './components/Web3/WalletConnect';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-
+import {MetaMaskConnector} from 'wagmi/connectors/metaMask';
+import TradePage from './pages/trade';
+import AccountPage from './pages/account';
+import './styles/layout.css';
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import MainLayout from "./components/Layout/MainLayout.tsx";
 // 配置链和提供者
-const { chains, publicClient } = configureChains(
+const {chains, publicClient} = configureChains(
     [sepolia],
     [
         publicProvider()
@@ -16,7 +19,7 @@ const { chains, publicClient } = configureChains(
 const config = createConfig({
     autoConnect: true,
     connectors: [
-        new MetaMaskConnector({ chains })
+        new MetaMaskConnector({chains})
     ],
     publicClient,
 });
@@ -25,24 +28,15 @@ const config = createConfig({
 function App() {
     return (
         <WagmiConfig config={config}>
-            <div className="app" style={{
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '20px',
-                background: '#f0f2f5'  // 添加背景色
-            }}>
-                <h1 style={{
-                    marginBottom: '30px',
-                    color: '#1890ff',
-                    fontSize: '24px',
-                    fontWeight: 'bold'
-                }}>
-                    Web3 交易系统
-                </h1>
-                <WalletConnect />
-            </div>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<MainLayout/>}>
+                        <Route index element={<Navigate to="/trade" replace/>}/>
+                        <Route path="trade" element={<TradePage/>}/>
+                        <Route path="account" element={<AccountPage/>}/>
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </WagmiConfig>
     );
 }

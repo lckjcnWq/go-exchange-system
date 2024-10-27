@@ -63,8 +63,8 @@ const WalletConnect:React.FC = () => {
                     <span className="address" style={{
                         fontFamily: 'monospace',
                         padding: '4px 8px',
-                        background: '#ffffff',
-                        borderRadius: '4px',
+                        background: '#fe4512',
+                        borderRadius: '8px',
                         border: '1px solid #d9d9d9',
                     }}>
             {formatAddress(address!)}

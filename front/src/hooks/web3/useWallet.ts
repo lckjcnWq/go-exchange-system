@@ -2,7 +2,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import { CONFIG } from '../../config';
 import { WalletInfo } from '../../types';
 
-export const UseWallet = ():WalletInfo =>{
+export const useWallet = ():WalletInfo =>{
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
 
