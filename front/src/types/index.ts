@@ -1,6 +1,6 @@
 export interface WalletInfo{
     address:string,
-    chainId:string
+    chainId:number,
     isConnected:boolean,
 }
 
