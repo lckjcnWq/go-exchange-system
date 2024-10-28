@@ -1,0 +1,21 @@
+.account-page {
+    width: 100%;
+}
+
+.assets-overview .ant-card {
+    height: 100%;
+}
+
+.transaction-history {
+    margin-top: 16px;
+}
+
+.wallet-not-connected {
+    text-align: center;
+    padding: 24px;
+    color: #999;
+}
+
+.wallet-status .ant-descriptions-item-label {
+    width: 100px;
+}
