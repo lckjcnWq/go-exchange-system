@@ -1,0 +1,30 @@
+.pair-selector {
+    background: #fff;
+    padding: 16px;
+    border-radius: 2px;
+}
+
+.pair-select {
+    width: 100%;
+}
+
+.pair-option {
+    padding: 4px 0;
+}
+
+.pair-info {
+    color: #8c8c8c;
+    font-size: 12px;
+}
+
+.price-display {
+    margin-bottom: 24px;
+}
+
+.trade-form .ant-form-item {
+    margin-bottom: 16px;
+}
+
+.trade-page .ant-card {
+    height: 100%;
+}
