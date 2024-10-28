@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { TrademarkOutlined, UserOutlined } from '@ant-design/icons';
 import WalletConnect from '../Web3/WalletConnect';
-import '../../styles/layout.css'
+import './MainLayout.css'
 
 const {Header,Content,Sider,Footer} = Layout
 

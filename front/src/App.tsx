@@ -4,7 +4,7 @@ import {publicProvider} from 'wagmi/providers/public';
 import {MetaMaskConnector} from 'wagmi/connectors/metaMask';
 import TradePage from './pages/trade';
 import AccountPage from './pages/account';
-import './styles/layout.css';
+import './components/Layout/MainLayout.css';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import MainLayout from "./components/Layout/MainLayout.tsx";
 // 配置链和提供者
