@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"backend/internal/service/ethereum"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -16,6 +17,11 @@ var (
 		Usage: "main",
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
+			// 初始化区块链服务
+			if err := ethereum.InitBlockchainService(ctx); err != nil {
+				g.Log().Fatal(ctx, "Failed to initialize blockchain services:", err)
+			}
+			defer ethereum.CloseBlockchainServices()
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
