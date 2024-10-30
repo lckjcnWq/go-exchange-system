@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"backend/internal/controller"
 	"backend/internal/service/ethereum"
 	"context"
 
@@ -27,6 +28,16 @@ var (
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					hello.NewV1(),
+				)
+			})
+			priceController, err := controller.NewPriceController()
+			if err != nil {
+				g.Log().Fatal(context.Background(), "Failed to create price controller:", err)
+			}
+
+			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
+				group.Bind(
+					priceController.GetPrice,
 				)
 			})
 			s.Run()

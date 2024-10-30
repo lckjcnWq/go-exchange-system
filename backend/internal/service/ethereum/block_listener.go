@@ -76,10 +76,10 @@ func (l *BlockListener) processTransaction(tx *types.Transaction) {
 	// 2. 解析交易数据
 	// 3. 更新数据库
 	// 4. 通知相关用户
-	g.Log().Debug(context.Background(), "Processing transaction",
+	/*g.Log().Debug(context.Background(), "Processing transaction",
 		"hash", tx.Hash().Hex(),
 		"value", tx.Value(),
-	)
+	)*/
 }
 
 // Stop 停止监听

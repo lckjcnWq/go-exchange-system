@@ -45,24 +45,53 @@ func NewUniswapService() (*UniswapService, error) {
 
 // GetAmountOut 计算交易输出金额
 func (s *UniswapService) GetAmountOut(ctx context.Context, amountIn *big.Int, path []common.Address) ([]*big.Int, error) {
+	g.Log().Debug(ctx, "GetAmountOut input",
+		"amountIn", amountIn.String(),
+		"path", path,
+		"routerAddr", s.routerAddr.Hex())
+
 	data, err := s.routerABI.Pack("getAmountsOut", amountIn, path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to pack data: %v", err)
 	}
-	client := ethereum1.GetHTTPClient()
 
-	result, err := client.CallContract(ctx, ethereum.CallMsg{
+	g.Log().Debug(ctx, "Contract call data",
+		"data", common.Bytes2Hex(data))
+
+	client := ethereum1.GetHTTPClient()
+	msg := ethereum.CallMsg{
 		To:   &s.routerAddr,
 		Data: data,
-	}, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to call contract: %v", err)
 	}
-	amounts, err := s.routerABI.Unpack("getAmountsOut", result)
+
+	result, err := client.CallContract(ctx, ethereum.CallMsg(msg), nil)
+	if err != nil {
+		return nil, fmt.Errorf("contract call failed: %v", err)
+	}
+
+	if len(result) == 0 {
+		status, err := client.PendingCallContract(ctx, msg)
+		if err != nil {
+			g.Log().Error(ctx, "Failed to check contract call status", "error", err)
+		} else {
+			g.Log().Debug(ctx, "Contract call status", "status", common.Bytes2Hex(status))
+		}
+		return nil, fmt.Errorf("empty result from contract")
+	}
+
+	// 解析返回结果
+	output, err := s.routerABI.Unpack("getAmountsOut", result)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unpack result: %v", err)
 	}
-	return amounts[0].([]*big.Int), nil
+
+	// 将输出转换为[]*big.Int
+	amountsRaw, ok := output[0].([]*big.Int)
+	if !ok {
+		return nil, fmt.Errorf("invalid output format")
+	}
+
+	return amountsRaw, nil
 }
 
 // GetPairReserves 获取交易对储备金
