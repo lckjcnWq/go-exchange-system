@@ -3,6 +3,7 @@ package cmd
 import (
 	"backend/internal/controller"
 	"backend/internal/service/ethereum"
+	"backend/internal/service/ws"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -38,6 +39,22 @@ var (
 			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
 				group.Bind(
 					priceController.GetPrice,
+				)
+			})
+			// 初始化WebSocket管理器
+			ws.Init()
+
+			// WebSocket路由
+			s.BindHandler("/ws", func(r *ghttp.Request) {
+				ws.Get().HandleConnection(r)
+			})
+
+			// REST API路由
+			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
+				group.Middleware(middleware.CORS)
+				group.Bind(
+					controller.Trade,
+					controller.Price,
 				)
 			})
 			s.Run()
