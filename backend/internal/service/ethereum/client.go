@@ -3,12 +3,13 @@ package ethereum
 import (
 	"context"
 	"fmt"
+	"sync"
+	"time"
+
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
-	"sync"
-	"time"
 )
 
 type ConnectionMode int
