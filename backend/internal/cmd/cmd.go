@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"backend/internal/controller"
+	"backend/internal/middleware"
 	"backend/internal/service/ethereum"
 	"backend/internal/service/ws"
 	"context"
@@ -25,20 +26,15 @@ var (
 			}
 			defer ethereum.CloseBlockchainServices()
 			s := g.Server()
+			s.Use(
+				middleware.ErrorHandler,
+				middleware.RequestLog,
+				middleware.CORS,
+			)
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					hello.NewV1(),
-				)
-			})
-			priceController, err := controller.NewPriceController()
-			if err != nil {
-				g.Log().Fatal(context.Background(), "Failed to create price controller:", err)
-			}
-
-			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
-				group.Bind(
-					priceController.GetPrice,
 				)
 			})
 			// 初始化WebSocket管理器
@@ -51,7 +47,6 @@ var (
 
 			// REST API路由
 			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
-				group.Middleware(middleware.CORS)
 				group.Bind(
 					controller.Trade,
 					controller.Price,
